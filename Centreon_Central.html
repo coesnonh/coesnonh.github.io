@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centreon_Central</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <button id="btnBackToIndex">Retour à l'accueil</button>
+
+  <div class="stackedit__html"><h1 id="installation-centreon-18.10-avec-son-premier-hôte">Installation centreon 18.10 avec son premier hôte</h1>
+<p>Centreon est un logiciel de supervision, c’est-à-dire qu’il permet à son utilisateur d’avoir un affichage sur l’état de ses objets connecté.<br>
+En entreprise, il peut par exemple permettre de surveiller les switchs, firewalls et serveurs, ainsi la panne peut-être évitée/résolue avant l’appelle d’un employé.</p>
+<p>Durant mon stage de deuxième année de BTS SIO, j’avais déjà en tête de rentrer dans l’entreprise et faire mon superviseur pour manager les posts clients et les switchs or, je me suis rendu compte qu’il serait plus utile que prévu plus que les postes de travail étaient surveillés par “Darktrace”, les switchs et bornes Wi-Fi par Netgear manager, mais les serveurs, eux n’étaient pas surveillé.<br>
+J’avais donc mon contexte et ma raison de passer autant de temps sur ce projet.</p>
+<h2 id="téléchargement-et-installation-de-centreon">Téléchargement et installation de centreon</h2>
+<p>Ayant fait plusieurs testes d’installations sous debian stretch, l’installation c’est révélé longue j’ai donc fini par me réfugier sur la centreon VM. Pour ce qui est des installations de A à Z, le blog de kermith qui ma d’ailleurs beaucoup aidé saura vous en dire plus que moi.</p>
+<p>Pour un gain de temps considérable, je vais utiliser la VM de centreon, rendez vous sur la page de téléchargement : <a href="https://download.centreon.com/">https://download.centreon.com/</a></p>
+<p><img src="https://i.loli.net/2019/02/07/5c5bf08cad144.png" alt="5c5bf08cad144"></p>
+<p>A préciser que mon installation se fait sous un serveur Vmware, on va donc utiliser la centreon central 18.10 en format ovf qu’on importera ensuite dans le serveur qui s’occupera de le convertir au format vmware qui est le format vmdk.</p>
+<p>L’installation est un jeu d’enfant, une fois que la machine est prête, après quelques réglages, elle sera déjà prête à l’utilisation, la distribution est centOS</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c2b8c36dc3.png" alt="5c5c2b8c36dc3"></p>
+<pre><code>/!\ REMARQUE : 
+En france, la timezone est : Europe/Paris
+Afin de passer le clavier en mode azerty on peut avoir recours a la commande : 
+
+loadkeys fr
+</code></pre>
+<hr>
+<p>Ceci fait, on peut ensuite passer sur la partie web, pour cela on peut voir l’adresse ip de la machine en tapant :</p>
+<pre><code>ip addr
+</code></pre>
+<h1 id="ajout-dun-hôte">Ajout d’un hôte</h1>
+<p>Une fois connecté à l’interface web, on peut déjà voir qu’un hôte est actif, il s’agit du serveur lui même</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c2dc67b416.png" alt="5c5c2dc67b416"></p>
+<p>Nous allons maintenant activer le module des plugins centreon de base. Ce pack de plugins est payant mais l’entreprise Centreon offre un pack de 10 plugins gratuitement afin d’administrer divers équipements.</p>
+<p>Pour ça, rendez vous dans : Administrations -&gt; Extensions -&gt; Modules ; puis on clique sur install/upgrade</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c2ea3277b4.png" alt="5c5c2ea3277b4"></p>
+<p>Ceci fait, nous auront maintenant accès au plugin pack dans Configuration -&gt; Plugin pack -&gt; manager</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c2f0a73a4a.png" alt="5c5c2f0a73a4a"></p>
+<p>Ceci nous donne accès donc a 10 plugins, dont certains assez intéressant comme le pack de plugins cisco, linux, mysql et windows snmp.</p>
+<p>Ici, nous allons utiliser le windows snmp(Il faudra donc avoir au préalable installé le service snmp sur la machine et seulement autoriser les traps de notre central centreon), donc afin de créer notre hôte, rendez vous dans : configuration -&gt; hôtes -&gt; hôtes -&gt; Ajouter</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c2fa1396b9.png" alt="5c5c2fa1396b9"></p>
+<p>Il faut ensuite recharger le poller (un poller est un serveur centreon qui peut soit le central qui est le master soit un serveur esclave).</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c36c684764.png" alt="5c5c36c684764"></p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c372994923.png" alt="5c5c372994923"></p>
+<p>Sur cette page, il faudra sélectionner le poller (collecteurs), qui est dans notre cas le central.</p>
+<p>Ensuite, cocher toute les cases et choisir la méthode recharger en enfin cliquer sur exporter, si tout c’est bien passé, les instructions seront suivis d’un “OK”</p>
+<hr>
+<p>Vous souvenez vous du modèles choisis ? “os-windows-snmp-custom”. Il comprend avec lui 4 service a monitorer :</p>
+<ul>
+<li>
+<p>CPU</p>
+</li>
+<li>
+<p>MEMORY</p>
+</li>
+<li>
+<p>PING</p>
+</li>
+<li>
+<p>SWAP</p>
+</li>
+</ul>
+<p>On peut bien entendu en ajouter, grâce au plugin pack qui intègre déjà d’autre service (On verra dans un autre article comment ajouter ses propres services avec les centreon-plugins qui offre une plus large gamme de service, mais qui demande aussi plus d’huile de coude)</p>
+<p>Il serait intéressant d’ajouter les services suivant pour le serveur AD2 :</p>
+<ul>
+<li>
+<p>Uptime</p>
+</li>
+<li>
+<p>Disk C:\</p>
+</li>
+<li>
+<p>Interfaces</p>
+</li>
+</ul>
+<p>Pour cela, rendez vous dans : Configuration -&gt; Services -&gt; Services par hôtes -&gt; Ajouter</p>
+<p><img src="https://i.loli.net/2019/02/07/5c5c3f10eee81.png" alt="5c5c3f10eee81"></p>
+<p>On choisit un modèle pré-fait, ici os-windows-traffic-snmp-custom et on choisit l’hôte à affecter.</p>
+<p>Dans l’option de contrôle des services, on peut voir plusieurs options, ce sont des arguments pour les commandes de services (Voir article sur les services).</p>
+<p>Il ne faut pas oublier de rentrer le nom de l’interface que l’on veut administrer, ici “ethernet_0”, le reste sera prédéfinis.</p>
+<ul>
+<li>
+<p>WARNINGIN : Avertissement au dessus de 80% du seuil de traffic entrant définis dans la commande</p>
+</li>
+<li>
+<p>CRITICALIN : Alerte au dessus de 90% du seuil de traffic entrant définis dans la commande</p>
+</li>
+<li>
+<p>WARNINGOUT : Avertissement au dessus de 80% du seuil de traffic sortant définis dans la commande</p>
+</li>
+<li>
+<p>CRITICALOUT : Alerte au dessus de 90% du seuil de traffic sortant définis dans la commande</p>
+</li>
+<li>
+<p>EXTRAOPTIONS : Argument supplémentaire a mettre au choix ou pas</p>
+</li>
+</ul>
+<p>On enregistre la configuration puis on peut de nouveau exporter la configuration du poller.</p>
+<p><img src="data:image/png;base64,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" alt="enter image description here"><br>
+Après quelques instants, on peut voir le service apparaître.</p>
+<p>Nous avons ici vue comment ajouter un hôte, et des services. Nous verrons par la suite comment créer nos propres services grâce aux centreon-plugins.</p>
+<p>Bonne journée !</p>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnBackToIndex = document.getElementById('btnBackToIndex');
+    if (btnBackToIndex) {
+      btnBackToIndex.addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

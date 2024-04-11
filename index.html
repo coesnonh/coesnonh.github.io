@@ -3,53 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Administrateur Système et Réseaux</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portfolio de Coesnon Hugo</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Nom Prénom</h1>
-            <p>Administrateur Système et Réseaux</p>
-        </div>
-    </header>
 
-    <section class="about">
-        <div class="container">
-            <h2>À propos de moi</h2>
-            <p>Présentez ici votre profil, vos compétences clés et votre expérience.</p>
-        </div>
-    </section>
-
-    <section class="skills">
-        <div class="container">
-            <h2>Compétences</h2>
-            <ul>
-                <li>Réseaux informatiques</li>
-                <li>Administration système (Linux, Windows)</li>
-                <li>Sécurité informatique</li>
-                <li>Virtualisation (VMware, Hyper-V)</li>
-                <li>Scripting (Bash, PowerShell)</li>
+<!-- Barre de navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark ">
+    <div class="container">
+        <a class="navbar-brand" href="#">Coesnon Hugo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#about" id="nav-about">À propos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#projects" id="nav-projects">Projets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact" id="nav-contact">Contact</a>
+                </li>
             </ul>
         </div>
-    </section>
+    </div>
+</nav>
 
-    <section class="experience">
-        <div class="container">
-            <h2>Expérience professionnelle</h2>
-            <ul>
-                <li>Entreprise A - Administrateur Système (2018 - Présent)</li>
-                <li>Entreprise B - Technicien Réseaux (2015 - 2018)</li>
-            </ul>
+<!-- Section À propos -->
+<section id="about" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h2>COESNON Hugo</h2>
+                <p>Administrateur systèmes et réseaux passionné, avec près de 4 ans d'expérience. Expertise en gestion de serveurs (Windows, Linux) et réseaux locaux/étendus. Motivé par l'optimisation et la sécurité informatique.</p>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer>
-        <div class="container">
-            <p>Contact : email@example.com | Téléphone : +123456789</p>
+<!-- Section Projets -->
+<section id="projects" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h2>Mes Projets</h2>
+                <!-- Ajoutez ici vos projets avec des liens vers les détails -->
+            </div>
         </div>
-    </footer>
+        
+        <div class="row">
+            <!-- Carte du premier projet -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Installation de Centreon</h5>
+                        <p class="card-text">Projet de stage en BTS. Installation et configuration d'une node Centreon.</p>
+                        <a href="Centreon_Central.html" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
 
-    <script src="script.js"></script>
+            <!-- Carte du deuxième projet -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Certification Radius</h5>
+                        <p class="card-text">Utilisation du rôle de service certification radius afin d'avoir une authentification wifi.</p>
+                        <a href="Certificationradius.html" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Carte du troisième projet -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">FTP Sécurisé</h5>
+                        <p class="card-text">Création d'un serveur FTP sécurisé sous le service proFTPD.</p>
+                        <a href="ftpsecurise.html" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Loadbalancing</h5>
+                        <p class="card-text">Installation d'un répartisseur de tâche entre deux serveurs web.</p>
+                        <a href="Loadbalancing.html" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Pacemaker & Corosync</h5>
+                        <p class="card-text">Création d'un cluster web pacemaker & corosync.</p>
+                        <a href="Pacemakercorosync.html" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+
+<!-- Section Contact -->
+<section id="contact" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h2>Contactez-moi</h2>
+                <!-- Ajoutez ici un formulaire de contact ou vos informations de contact -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="js/script.js"></script>
 </body>
 </html>

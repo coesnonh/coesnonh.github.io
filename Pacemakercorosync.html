@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacemaker corosync</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <button id="btnBackToIndex">Retour à l'accueil</button>
+
+  <div class="stackedit__html"><h1 id="création-dun-cluster-haute-disponibilité-avec-pacemaker-et-corosync">Création d’un cluster haute disponibilité avec pacemaker et corosync</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Il est aujourd’hui essentiel d’assurer la disponibilité d’un serveur web H24 7/7.<br>
+Pour se faire, on peut créer un cluster de façon assez rapide grâce à pacemaker et corosync.</p>
+<h2 id="préparation">Préparation</h2>
+<p>Pour y parvenir, nous allons créer deux machines virtuelles sous debian 9 “stretch”.</p>
+<h2 id="installation-du-cluster">Installation du cluster</h2>
+<ul>
+<li>
+<p>Mise à jour du système :<br>
+<code>apt-get update &amp;&amp; apt-get upgrade</code></p>
+</li>
+<li>
+<p>Installation des paquets pour la haute disponibilité<br>
+<code>apt-get install -y build-essential openssh-server net-tools pacemaker crmsh</code></p>
+</li>
+<li>
+<p>Générer une clef d’authentification sur le Serveur A<br>
+<code>apt-get install haveged &amp;&amp; corosync-keygen</code></p>
+</li>
+<li>
+<p>Envoyer la clef sur le Serveur B<br>
+<code>scp /etc/corosync/authkey root@Serveur_B_IP:/etc/corosync/</code></p>
+</li>
+<li>
+<p>Modifier les permissions de la clef sur le serveur B<br>
+<code>chown root: /etc/corosync/authkey &amp;&amp; chmod 400 /etc/corosync/authkey</code></p>
+</li>
+<li>
+<p>Modifier le fichier de configuration corosync sur les deux serveurs<br>
+<code>nano /etc/corosync/corosync.conf</code></p>
+</li>
+</ul>
+<blockquote>
+<p>totem {<br>
+version: 2<br>
+cluster_name: lbcluster<br>
+transport: udpu<br>
+interface {<br>
+ringnumber: 0<br>
+bindnetaddr:  <strong>IP_Flottante</strong><br>
+broadcast: yes<br>
+mcastport: 5405<br>
+}<br>
+}<br>
+quorum {<br>
+provider: corosync_votequorum<br>
+two_node: 1<br>
+}<br>
+nodelist {<br>
+node {<br>
+ring0_addr: <strong>Serveur_A_IP</strong><br>
+name: primary<br>
+nodeid: 1<br>
+}<br>
+node {<br>
+ring0_addr: <strong>Serveur_B_IP</strong><br>
+name: secondary<br>
+nodeid: 2<br>
+}<br>
+}<br>
+logging {<br>
+to_logfile: yes<br>
+logfile: /var/log/corosync/corosync.log<br>
+to_syslog: yes<br>
+timestamp: on<br>
+}</p>
+</blockquote>
+<ul>
+<li>Démarrer le service Corosync<br>
+<code>sudo service corosync start</code></li>
+<li>Vérifier la config<br>
+<code>sudo corosync-cmapctl | grep members</code><br>
+Si la config est bonne, vous devriez obtenir un résultat similaire.</li>
+</ul>
+<blockquote>
+<p>runtime.totem.pg.mrp.srp.members.1.config_version (u64) = 0<br>
+runtime.totem.pg.mrp.srp.members.1.ip (str) = r(0) ip(server_A_private_IP_address)<br>
+runtime.totem.pg.mrp.srp.members.1.join_count (u32) = 1<br>
+runtime.totem.pg.mrp.srp.members.1.status (str) = joined<br>
+runtime.totem.pg.mrp.srp.members.2.config_version (u64) = 0<br>
+runtime.totem.pg.mrp.srp.members.2.ip (str) = r(0) ip(server_B_private_IP_address)<br>
+runtime.totem.pg.mrp.srp.members.2.join_count (u32) = 1<br>
+runtime.totem.pg.mrp.srp.members.2.status (str) = joined</p>
+</blockquote>
+<ul>
+<li>
+<p>Ajouter pacemaker au démarrage sur les deux machines puis démarrer le service.<br>
+<code>update-rc.d pacemaker defaults 20 01 &amp;&amp; service pacemaker start</code></p>
+</li>
+<li>
+<p>Désactiver deux fonctionnalité inutile pour notre clusterr<br>
+<code>crm configure property stonith-enabled=false</code></p>
+<p><code>crm configure property no-quorum-policy=ignore</code></p>
+</li>
+<li>
+<p>Installation serveur LAMP sur les deux machines<br>
+<code>apt-get install -y apache2 mariadb-server mariadb-client php libapache2-mod-php php-mysql</code></p>
+</li>
+<li>
+<p>Configuration IP virtuel et du groupe de ressource.<br>
+<code>crm configure primitive virtual_ip \ ocf:heartbeat:IPaddr2 params ip="IP_FLOTTANTE" \ cidr_netmask="32" op monitor interval="10s" \ meta migration-threshold="10"</code></p>
+<p><code>crm configure primitive webserver \ ocf:heartbeat:apache configfile=/etc/apache2/apache2.conf \ op start timeout="40s" interval="0" \ op stop timeout="60s" interval="0" \ op monitor interval="10s" timeout="60s" \ meta migration-threshold="10"</code></p>
+</li>
+<li>
+<p>Création du groupe de ressource</p>
+<p><code>crm configure group ha_balance virtual_ip webserver</code></p>
+</li>
+</ul>
+<h2 id="quelques-commandes-utiles">Quelques commandes utiles</h2>
+<ul>
+<li>Lister tous les modules disponibles :</li>
+</ul>
+<p><code>crm ra list ocf</code></p>
+<ul>
+<li>Connaître le statut de cluster :</li>
+</ul>
+<p><code>crm status</code></p>
+<ul>
+<li>Visualiser la configuration du cluster :</li>
+</ul>
+<p><code>crm configure show</code></p>
+<ul>
+<li>Stoper une ressource :</li>
+</ul>
+<p><code>crm resource stop nom-de-la-ressource</code></p>
+<ul>
+<li>Supprimer une ressource (faut que la ressource soit arrêtée au préalable) :</li>
+</ul>
+<p><code>crm configure delete nom-de-la-ressource</code></p>
+<ul>
+<li>Nettoyer les message d’erreur d’une ressource :</li>
+</ul>
+<p><code>crm resource cleanup nom-de-la-ressource</code></p>
+<ul>
+<li>Mettre en standby un noeud :</li>
+</ul>
+<p><code>crm node standby wan-masterprimary</code></p>
+<ul>
+<li>Mettre en ligne un noeud :</li>
+</ul>
+<p><code>crm node online wan-mastersecondary</code></p>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnBackToIndex = document.getElementById('btnBackToIndex');
+    if (btnBackToIndex) {
+      btnBackToIndex.addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

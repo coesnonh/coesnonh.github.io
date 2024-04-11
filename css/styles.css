@@ -1,0 +1,98 @@
+.navbar {
+    background-color: #343a40; /* Fond sombre pour la navbar */
+    color: #ffffff; /* Couleur du texte en blanc */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Assure que la navbar est au-dessus du contenu */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: #ffffff; /* Couleur blanche pour les liens */
+    font-size: 1.2rem;
+    margin-right: 15px; /* Marge à droite entre les liens */
+}
+
+.nav-link:hover {
+    color: #e9ecef; /* Couleur des liens au survol */
+}
+
+.section-title {
+    margin-bottom: 30px;
+}
+
+#projects, #contact {
+    min-height: 100vh; /* Utilise au moins 100% de la hauteur de la fenêtre */
+    display: flex;
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: top; /* Centre le contenu verticalement */
+    text-align: center; /* Centre le texte horizontalement */
+    padding: 500px; /* Ajoute un espacement interne */
+}
+
+/* Style pour le texte à l'intérieur de #about, #projects, #contact */
+#projects h2, #contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #102136;
+    font-weight: bold;
+}
+
+#projects p, #contact p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+#about {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f9fa;
+    /* Ajouter une image de fond */
+    background-image: url('https://images5.alphacoders.com/911/911665.png');
+    background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la section */
+    background-position: center; /* Centre l'image horizontalement et verticalement */
+}
+
+#about h2 {
+    font-size: 3rem; /* Taille de police plus grande pour le titre */
+    color: #ffffff; 
+    font-weight: bold;
+}
+
+#about p {
+    font-size: 1.5rem; /* Taille de police plus grande pour le paragraphe */
+    color: #ffffff; /* Couleur du texte */
+}
+
+
+.card {
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.btn {
+    font-size: 1rem;
+}

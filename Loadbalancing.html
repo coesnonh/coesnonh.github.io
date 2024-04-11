@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load balancing</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <button id="btnBackToIndex">Retour à l'accueil</button>
+
+  <div class="stackedit__html"><h1 id="le-load-balancing-avec-haproxy">Le load-balancing avec HaProxy</h1>
+<h3 id="introduction">Introduction</h3>
+<p>Le répartiteur de charge est un équipement rencontré sur les grosses infrastructures où les serveurs doivent faire face à de très fortes bandes passantes et charges élevées de traffic. cet équipement est donc chargé de distribuer la charge réseau en fonction des caractéristiques de celui ci et de la disponibilité des serveurs. Cela apporte donc un avantage de sécurité, il permet donc de mieux se protéger contre les dénis de services.</p>
+<p><a href="https://goopics.net/i/Y0jwo"><img src="https://i.goopics.net/Y0jwo.png" alt="Image"></a></p>
+<h1 id="pré-requis-pour-installer-un-load-balancer-en-environnement-lab">Pré-requis pour installer un load balancer en environnement lab</h1>
+<ul>
+<li>Deux serveurs web</li>
+<li>Une fresh install de debian</li>
+</ul>
+<h1 id="installation-et-configuration-de-haproxy">Installation et configuration de HaProxy</h1>
+<p>La version 1.7 de HaProxy est dans les dépôts de Debian 9. Nous allons donc l’installer</p>
+<pre><code>apt-get update &amp;&amp; apt-get install haproxy
+</code></pre>
+<h3 id="configuration-basique">Configuration basique</h3>
+<p>Le fichier de configuration se trouve dans /etc/haproxy/haproxy.cfg. Nous allons l’éditer pour qu’il répartisse la charge sur nos deux serveurs apache.</p>
+<pre><code>vi /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>à la fin du fichier, nous allons ajouter les lignes suivante</p>
+<pre><code>frontend proxypublic
+    bind *:80
+    default_backend fermeweb
+    
+backend fermeweb
+    balance roundrobin
+    cookie PHPSESSID prefix indirect nocache
+    server web1 ip_addr_srvWeb1:80 cookie Srv1 check 
+	server web2 ip_addr_srvWeb2:80 cookie Srv2 check
+	stats uri /statshaproxy
+	stats auth admin:admin
+	stats refresh 30s
+</code></pre>
+<p>le <em>bind</em> définit le port d’écoute, default_backend définit le backend par défaut de notre directive frontend.</p>
+<p>Afin d’avoir une persisente des cookies, j’ai ajouté ces arguments :</p>
+<pre><code>cookie PHPSESSID prefix indirect nocache
+.... cookie Srv1
+.... cookie Srv2
+</code></pre>
+<p>L’argument check permet lui d’avoir une actualisation des stats en temps réel, stats qui sont par ailleurs mise à disposition grâce aux lignes :</p>
+<pre><code>    stats uri /statshaproxy
+	stats auth admin:admin
+	stats refresh 30sere
+</code></pre>
+<p>Cela signifie que les stats seront disponible à l’IP du serveur haproxy.<br>
+http://ip_addr/statshaproxy</p>
+<p>stats auth lui définit les identifiants d’accès aux stats, ce sera ici :<br>
+login : admin<br>
+password : admin</p>
+<p>Afin d’effectuer des tests de fonctionnement, nous pouvons créer une page web dans chacun des serveurs web. Par exemple :<br>
+Serveur 1</p>
+<pre><code>&lt;H1&gt;Serveur 1&lt;/H1&gt;
+</code></pre>
+<p>Serveur 2</p>
+<pre><code>&lt;H1&gt;Serveur 2&lt;/H1&gt;
+</code></pre>
+<p>Puis enfin accéder à la page web grâce à l’ip du load balancer puis rafraîchir et donc observer la répartition de charge.<br>
+<a href="https://goopics.net/i/bQoKQ"><img src="https://i.goopics.net/bQoKQ.gif" alt="Image"></a></p>
+<h2 id="exemple-de-stats">Exemple de stats</h2>
+<p><a href="https://goopics.net/i/javKk"><img src="https://i.goopics.net/javKk.png" alt="Image"></a><br>
+Et si je rafraîchis la page plusieurs fois, les valeurs vont changer :<br>
+<a href="https://goopics.net/i/m9vak"><img src="https://i.goopics.net/m9vak.png" alt="Image"></a></p>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnBackToIndex = document.getElementById('btnBackToIndex');
+    if (btnBackToIndex) {
+      btnBackToIndex.addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

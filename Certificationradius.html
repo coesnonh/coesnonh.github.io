@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certification radius</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <button id="btnBackToIndex">Retour à l'accueil</button>
+
+  <div class="stackedit__html"><p>Coesnon Hugo					-	Serveur Radius</p>
+<h1 id="mise-en-place-dun-serveur-sécurisé-radius">Mise en place d’un serveur sécurisé Radius</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Radius est un protocole permettant l’authentification distante à un service. (ex : vpn, wifi)<br>
+Dans le cadre de ma formation en BTS SIO, nous avons eu pour projet de créer un serveur radius afin de s’authentifier par le domaine au wifi.</p>
+<h2 id="pré-requis">Pré-requis</h2>
+<ul>
+<li>Borne wifi</li>
+<li>Un serveur windows (Contrôleur de domaine, DHCP, DNS, Certificats Active Directory, services de stratégies et d’accès réseaux.)</li>
+<li>Un switch/Routeur</li>
+</ul>
+<h2 id="installation-du-contrôleur-de-domaine-dhcp-et-dns">Installation du Contrôleur de domaine, dhcp et dns</h2>
+<p>Dans un premier temps, il faudra paramétrer l’ip du serveur en statique.<br>
+<a href="https://goopics.net/i/0RnbO"><img src="https://i.goopics.net/0RnbO.png" alt="Image"></a></p>
+<p>Puis on ajoutera ensuite les services contrôleur de domaine, DHCP et DNS.<br>
+<a href="https://goopics.net/i/xEl1Q"><img src="https://i.goopics.net/xEl1Q.png" alt="Image"></a></p>
+<p>On ira ensuite créer la forêt qui s’apellera ici “home.lab”<br>
+<a href="https://goopics.net/i/4AXaO"><img src="https://i.goopics.net/4AXaO.png" alt="Image"></a></p>
+<p>On pourra ensuite configurer le service DHCP<br>
+<a href="https://goopics.net/i/2qGkR"><img src="https://i.goopics.net/2qGkR.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/ogxRG"><img src="https://i.goopics.net/ogxRG.png" alt="Image"></a></p>
+<h3 id="création-du-scope-dhcp">Création du scope DHCP</h3>
+<p>Afin de créer la pool d’adresse, il faudra créer un nouveau scope dans l’interface de management dhcp<br>
+<a href="https://goopics.net/i/8JYG7"><img src="https://i.goopics.net/8JYG7.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/OZNg2"><img src="https://i.goopics.net/OZNg2.png" alt="Image"></a></p>
+<ul>
+<li>Définition de la range d’adresse<br>
+<a href="https://goopics.net/i/0RnmO"><img src="https://i.goopics.net/0RnmO.png" alt="Image"></a></li>
+<li>Sur l’écran d’après, vous pourrez choisir une range d’exclusion ou pas<br>
+<a href="https://goopics.net/i/xElmQ"><img src="https://i.goopics.net/xElmQ.png" alt="Image"></a></li>
+<li>choix du router<br>
+<a href="https://goopics.net/i/ZOVnq"><img src="https://i.goopics.net/ZOVnq.png" alt="Image"></a></li>
+</ul>
+<h3 id="création-dun-groupe-et-utilisateur-de-test">Création d’un groupe et utilisateur de test</h3>
+<p>Comme le serveur radius ne sera accessible que par un groupe d’utilisateur présent sur l’annuaire active directory.<br>
+Je vais donc créer une unité d’organisation avec dedans un utilisateur ‘test’ qui sera dans le groupe ‘wlan’</p>
+<h2 id="installation-et-configuration-du-service-de-certificats">Installation et configuration du service de certificats</h2>
+<ul>
+<li>Installez le rôle<br>
+<a href="https://goopics.net/i/7JPRa"><img src="https://i.goopics.net/7JPRa.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/vEAl9"><img src="https://i.goopics.net/vEAl9.png" alt="Image"></a></li>
+<li>Configurez l’autorité de certification<br>
+<a href="https://goopics.net/i/Axyjo"><img src="https://i.goopics.net/Axyjo.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/LZ90A"><img src="https://i.goopics.net/LZ90A.png" alt="Image"></a></li>
+<li>Cochez “autorité de certification”<br>
+<a href="https://goopics.net/i/5Jd42"><img src="https://i.goopics.net/5Jd42.png" alt="Image"></a></li>
+<li>Suivre les étapes sans rien modifier<br>
+<a href="https://goopics.net/i/rdWj0"><img src="https://i.goopics.net/rdWj0.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/1JGXN"><img src="https://i.goopics.net/1JGXN.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/jaOYN"><img src="https://i.goopics.net/jaOYN.png" alt="Image"></a></li>
+<li>Changez l’algorithme de hachage en SHA1 puis choisir la longueur de la clé, au choix.<br>
+<a href="https://goopics.net/i/m9OwW"><img src="https://i.goopics.net/m9OwW.png" alt="Image"></a></li>
+<li>cliquez sur Suivant<br>
+<a href="https://goopics.net/i/KmnDy"><img src="https://i.goopics.net/KmnDy.png" alt="Image"></a></li>
+<li>Choisir la durée de l’autorité de certification<br>
+<a href="https://goopics.net/i/Q2d94"><img src="https://i.goopics.net/Q2d94.png" alt="Image"></a></li>
+<li>Suivre les prochaines étapes sans modifier<br>
+<a href="https://goopics.net/i/lnWd8"><img src="https://i.goopics.net/lnWd8.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/EvjdE"><img src="https://i.goopics.net/EvjdE.png" alt="Image"></a></li>
+</ul>
+<h3 id="création-dun-certificat">Création d’un certificat</h3>
+<ul>
+<li>Ouvrez la console de gestion microsft en l’éxucutant.<br>
+Windows + R &amp; tapez <em>mmc</em><br>
+<a href="https://goopics.net/i/bQRG2"><img src="https://i.goopics.net/bQRG2.png" alt="Image"></a></li>
+<li>Ajoutez un composant logiciel enfichable<br>
+<a href="https://goopics.net/i/WOR3N"><img src="https://i.goopics.net/WOR3N.png" alt="Image"></a></li>
+<li>Choisissez “Certificats”<br>
+<a href="https://goopics.net/i/DYyda"><img src="https://i.goopics.net/DYyda.png" alt="Image"></a></li>
+<li>Choisissez “Compte ordinateur”<br>
+<a href="https://goopics.net/i/qwl4n"><img src="https://i.goopics.net/qwl4n.png" alt="Image"></a></li>
+<li>Clique droit sur “personnal ou personnel” et demandez un certificat.<br>
+<a href="https://goopics.net/i/k30ee"><img src="https://i.goopics.net/k30ee.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/Vx5a8"><img src="https://i.goopics.net/Vx5a8.png" alt="Image"></a></li>
+<li>Cochez “Contrôleur de domaine”<br>
+<a href="https://goopics.net/i/a2R9y"><img src="https://i.goopics.net/a2R9y.png" alt="Image"></a></li>
+</ul>
+<h2 id="configuration-du-service-de-stratégies-daccès-réseaux">Configuration du service de stratégies d’accès réseaux</h2>
+<p>Pour configurer le service de stratégies et d’accès réseaux, accéder dans un premier à l’outil stratégie d’accès réseaux.<br>
+Puis, créer une nouvelle règle.</p>
+<ul>
+<li>Séléctionnez le scenario “Serveur RADIUS pour les connexions sans fil 802.1X” , puis cliquez sur “configurer 802.1X”<br>
+<a href="https://goopics.net/i/djOkd"><img src="https://i.goopics.net/djOkd.png" alt="Image"></a><br>
+-Choisissez la connexions sans fil sécurisées et nommé la comme vous le voulez.<br>
+<a href="https://goopics.net/i/NZea1"><img src="https://i.goopics.net/NZea1.png" alt="Image"></a></li>
+<li>Cliquez sur “ajouter un client Radius”</li>
+<li>Nommez le, donner lui en adresse votre borne wifi ou autre client.</li>
+<li>Donnez lui une clef secrète partagé<br>
+<a href="https://goopics.net/i/9JL9Y"><img src="https://i.goopics.net/9JL9Y.png" alt="Image"></a></li>
+<li>Choisir le nouveau client puis faire “suivant”</li>
+<li>Choisir le protocole “Microsoft PEAP”<br>
+<a href="https://goopics.net/i/9JL9q"><img src="https://i.goopics.net/9JL9q.png" alt="Image"></a></li>
+<li>Faire “configurer” Puis vérifié que c’est le bon certificat<br>
+<a href="https://goopics.net/i/GQk5k"><img src="https://i.goopics.net/GQk5k.png" alt="Image"></a></li>
+<li>Ajouter un groupe d’utilisateur domaine aux permissions d’accès<br>
+<a href="https://goopics.net/i/ePOVW"><img src="https://i.goopics.net/ePOVW.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/XORgl"><img src="https://i.goopics.net/XORgl.png" alt="Image"></a><br>
+La stratégie est maintenant configurer. Ne reste plus qu’a configurer le client, ici ce sera une borne wifi cisco, la configuration est assez rapide à effectuer.<br>
+<a href="https://goopics.net/i/4Awkl"><img src="https://i.goopics.net/4Awkl.png" alt="Image"></a><br>
+<a href="https://goopics.net/i/wE5L3"><img src="https://i.goopics.net/wE5L3.png" alt="Image"></a></li>
+</ul>
+<h3 id="phase-de-test">Phase de test</h3>
+<p>Il n’y a maintenant plus qu’a téster notre client Radius, avec un client possédant une carte wifi.<br>
+<a href="https://goopics.net/i/XORgX"><img src="https://i.goopics.net/XORgX.png" alt="Image"></a></p>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnBackToIndex = document.getElementById('btnBackToIndex');
+    if (btnBackToIndex) {
+      btnBackToIndex.addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ftpsecurise</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <button id="btnBackToIndex">Retour à l'accueil</button>
+
+  <div class="stackedit__html"><h1 id="installer-un-serveur-proftpd-sécurisé">Installer un serveur ProFTPd sécurisé</h1>
+<p>Il est souvent utile d’avoir a disposition un serveur ftp sur une machine distante, pour échanger des fichiers ou mettre à jour un site web. pour cela, la sécurité du ftp est essentiel.</p>
+<h2 id="pré-requis">pré-requis</h2>
+<p>L’installation se déroulera sur une fresh install de Debian 9 stretch.</p>
+<h2 id="installation-du-service-ftp">Installation du service ftp</h2>
+<p>étant disponible dans les dépôts debian, il n’y a cas lancer la commande qui suis pour installer le service.</p>
+<pre><code># apt-get update &amp;&amp; apt-get -y upgrade &amp;&amp; apt-get install build-essential proftpd openssl
+</code></pre>
+<p>Lors de l’installation de ProFTPd, il vous sera demandé comment il doit être lancer, pour un serveur avec faible traffic, “inetd” est recommandé.</p>
+<h2 id="configuration-de-proftpd">Configuration de ProFTPd</h2>
+<p>Le fichier de configuration est dans “/etc/proftpd/proftpd.conf”. Ouvrez le avec votre éditeur préféré.</p>
+<pre><code># nano /etc/proftpd/proftpd.conf
+</code></pre>
+<p>De base, quand un utilisateur se connecte, il accède a son dossier home, mais si les utilisateurs sont censé gérer les sites web, il peut être interessant de rediriger la connexion vers le /var/www</p>
+<pre><code>Default Root /var/www
+</code></pre>
+<p>Le serveur est dés lors utilisable, il faut maintenant le sécuriser.</p>
+<h2 id="sécuriser-le-serveur-ftp">Sécuriser le serveur FTP</h2>
+<p>Toujours dans le fichier proftpd.conf, décommentez la ligne suivante afin de charger le fichier de configuration tls au lancement du service.</p>
+<pre><code>#
+# This is used for FTPS connections
+#
+Include /etc/proftpd/tls.conf
+</code></pre>
+<p>On peut maintenant fermer et sauvegarder le fichier en faisant CTRL + X -&gt; Y<br>
+On va maintenant ouvrir le fichier /etc/proftpd/tls.conf</p>
+<pre><code># nano /etc/proftpd/tls.conf
+</code></pre>
+<p>Décommentez les lignes suivantes :</p>
+<pre><code>TLSEngine on
+TLSLog /var/log/proftpd/tls.log
+TLSProtocol SSLv23
+ 
+TLSVerifyClient off
+ 
+#TLS obligatoire
+TLSRequired on
+Include /etc/proftpd/tls.conf
+</code></pre>
+<p>Il faudra aussi décommenter les lignes suivantes, ce qui fera en sorte de charger les certificats que nous créerons après.</p>
+<pre><code>TLSRSACertificateFile /etc/ssl/certs/proftpd.crt
+TLSRSACertificateKeyFile /etc/ssl/private/proftpd.key
+</code></pre>
+<p>On enregistre et on ferme le fichier.<br>
+Passons a la création des certificats<br>
+Création de la clé :</p>
+<pre><code># openssl genrsa -out /etc/ssl/private/proftpd.key 2048
+</code></pre>
+<p>Création du certificat :</p>
+<pre><code># openssl req -new -x509 -days 1825 -key /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt
+</code></pre>
+<p>(Cette clé sera valide 1825 jours, soit 5 ans)</p>
+<p>il n’y a plus qu’à relancer le service proftpd afin qu’ils utilisent sa nouvelle configuration</p>
+<pre><code># service proftpd restart
+</code></pre>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnBackToIndex = document.getElementById('btnBackToIndex');
+    if (btnBackToIndex) {
+      btnBackToIndex.addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>
