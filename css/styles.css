@@ -1,10 +1,10 @@
 .navbar {
-    background-color: #343a40; /* Fond sombre pour la navbar */
-    color: #ffffff; /* Couleur du texte en blanc */
+    background-color: #343a40;
+    color: #ffffff; 
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000; /* Assure que la navbar est au-dessus du contenu */
+    z-index: 1000; 
 }
 
 .navbar-brand {
@@ -12,13 +12,13 @@
 }
 
 .nav-link {
-    color: #ffffff; /* Couleur blanche pour les liens */
+    color: #ffffff; 
     font-size: 1.2rem;
-    margin-right: 15px; /* Marge à droite entre les liens */
+    margin-right: 15px; 
 }
 
 .nav-link:hover {
-    color: #e9ecef; /* Couleur des liens au survol */
+    color: #e9ecef; 
 }
 
 .section-title {
@@ -26,15 +26,14 @@
 }
 
 #projects , #contact  {
-    min-height: 100vh; /* Utilise au moins 100% de la hauteur de la fenêtre */
-    display: flex;
-    justify-content: center; /* Centre le contenu horizontalement */
-    align-items: center; /* Centre le contenu verticalement */
-    text-align: center; /* Centre le texte horizontalement */
-    padding: 500px; /* Ajoute un espacement interne */
+    min-height: 100vh; 
+    justify-content: center;
+    align-items: center; 
+    text-align: center; 
+    padding: 500px; 
 }
 
-/* Style pour le texte à l'intérieur de #about, #projects, #contact */
+
 #projects h2, #contact h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
@@ -59,21 +58,20 @@
     text-align: center;
     padding: 50px;
     background-color: #f8f9fa;
-    /* Ajouter une image de fond */
     background-image: url(../images/fond.png);
-    background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la section */
-    background-position: center; /* Centre l'image horizontalement et verticalement */
+    background-size: cover; 
+    background-position: center; 
 }
 
 #about h2 {
-    font-size: 3rem; /* Taille de police plus grande pour le titre */
+    font-size: 3rem; 
     color: #ffffff; 
     font-weight: bold;
 }
 
 #about p {
-    font-size: 1.5rem; /* Taille de police plus grande pour le paragraphe */
-    color: #ffffff; /* Couleur du texte */
+    font-size: 1.5rem; 
+    color: #ffffff; 
 }
 
 
@@ -102,7 +100,7 @@
 }
 
 #skills {
-    height: 100vh; /* Utilise 100% de la hauteur de la fenêtre */
+    height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -115,21 +113,21 @@
     font-size: 3rem;
     color: #102136;
     font-weight: bold;
-    margin-bottom: 20px; /* Ajoute une marge en bas pour l'en-tête */
+    margin-bottom: 20px;
 }
 
 #skills p {
     font-size: 1.5rem;
     color: #555;
-    margin-bottom: 40px; /* Ajoute une marge en bas pour le paragraphe */
+    margin-bottom: 40px; 
 }
 
-/* Footer styles */
+
 .footer {
-    background-color: #343a40; /* Couleur de fond similaire à la navbar */
-    color: #ffffff; /* Couleur du texte en blanc */
-    position: fixed; /* Fixe le footer en bas de la fenêtre */
-    width: 100%; /* Largeur de 100% pour occuper toute la largeur de l'écran */
-    bottom: 0; /* Aligne le footer en bas de la page */
+    background-color: #343a40; 
+    color: #ffffff;  
+    position: fixed; 
+    width: 100%; 
+    bottom: 0;  
     height: 50px;
 }
