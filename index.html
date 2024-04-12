@@ -10,7 +10,7 @@
 <body>
 
 <!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark ">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="#">Coesnon Hugo</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,12 +25,16 @@
                     <a class="nav-link" href="#projects" id="nav-projects">Projets</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="#skills" id="nav-skills">Compétences</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#contact" id="nav-contact">Contact</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
 
 <!-- Section À propos -->
 <section id="about" class="py-5">
@@ -107,18 +111,90 @@
     </div>
 </section>
 
+<!-- Section Compétences -->
+<section id="skills" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h2>Compétences</h2>
+                <div class="skills-list">
+                    <h4>Systèmes d'Exploitation</h4>
+                    <ul>
+                        <li>Installation, configuration et maintenance avancée de Windows Server </li>
+                        <li>Administration avancée de systèmes Linux ( CentOS, Debian)</li>
+                        <li>Virtualisation avec VMware vSphere, Hyper-V</li>
+                    </ul>
+                    <h4>Réseaux et Sécurité</h4>
+                    <ul>
+                        <li>Configuration avancée de routeurs et commutateurs Cisco</li>
+                        <li>Mise en place de VLANs, VPNs, routage statique et dynamique</li>
+                        <li>Gestion des firewalls (pfSense)</li>
+                        <li>Implémentation de technologies de sécurité réseau (IDS/IPS, DPI)</li>
+                        <li>Sécurité des réseaux sans fil (802.1X, WPA/WPA2 Enterprise)</li>
+                    </ul>
+                    <h4>Services et Protocoles Réseau</h4>
+                    <ul>
+                        <li>Gestion avancée de services réseau : DNS, DHCP, LDAP, NTP</li>
+                        <li>Mise en place et administration d'Active Directory, LDAP</li>
+                        <li>Gestion avancée de messagerie (Exchange Server)</li>
+                    </ul>
+                    <h4>Sécurité et Gestion des Risques</h4>
+                    <ul>
+                        <li>Analyse des vulnérabilités et gestion des correctifs (Nessus, PingCastle)</li>
+                        <li>Élaboration et mise en œuvre de politiques de sécurité</li>
+                        <li>Gestion des certificats SSL/TLS</li>
+                    </ul>
+                    <h4>Automatisation et Scripting</h4>
+                    <ul>
+                        <li>Automatisation des tâches avec PowerShell, Bash, Python</li>
+                        <li>Utilisation avancée de Git pour le versionnement du code</li>
+                    </ul>
+                    <h4>Monitoring et Gestion des Performances</h4>
+                    <ul>
+                        <li>Configuration et surveillance avec Nagios, PRTG, Centreon</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
 <!-- Section Contact -->
 <section id="contact" class="py-5">
     <div class="container">
         <div class="row">
             <div class="col text-center">
                 <h2>Contactez-moi</h2>
-                <!-- Ajoutez ici un formulaire de contact ou vos informations de contact -->
+                <p>Vous pouvez me contacter par e-mail ou via LinkedIn :</p>
+
+                <!-- Icône pour l'e-mail -->
+                <a href="mailto:coesnonh@outlook.fr">
+                    <img src="images/enveloppe.png" alt="Email" width="65" height="78">
+                </a>
+
+                <!-- Icône pour LinkedIn -->
+                <a href="https://www.linkedin.com/in/coesnonh/" target="_blank">
+                    <img src="images/linkedin.png" alt="LinkedIn" width="40" height="40">
+                </a>
             </div>
         </div>
     </div>
 </section>
 
+
 <script src="js/script.js"></script>
 </body>
+<!-- Footer -->
+<footer class="footer mt-auto py-3 bg-dark text-white">
+    <div class="container text-center">
+        <p>
+                +33 6 12 34 56 78 / coesnonh@outlook.fr
+        </p>
+    </div>
+</footer>
+
 </html>

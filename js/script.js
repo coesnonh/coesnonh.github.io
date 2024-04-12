@@ -30,3 +30,28 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", highlightNavLink);
     highlightNavLink(); // Highlight initially on page load
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const footer = document.querySelector("footer");
+
+    function toggleFooterVisibility() {
+        const windowHeight = window.innerHeight;
+        const fullDocumentHeight = document.body.offsetHeight;
+        const scrollY = window.scrollY;
+
+        // Calculer la position de défilement à partir du bas de la page
+        const scrollPositionFromBottom = fullDocumentHeight - (scrollY + windowHeight);
+
+        // Afficher le footer si l'utilisateur a atteint le bas de la page
+        if (scrollPositionFromBottom < 50) {
+            footer.style.display = "block"; // Afficher le footer
+        } else {
+            footer.style.display = "none"; // Cacher le footer
+        }
+    }
+
+    // Ajouter un gestionnaire d'événement de défilement
+    window.addEventListener("scroll", toggleFooterVisibility);
+
+    // Appeler la fonction une fois au chargement de la page pour vérifier l'état initial
+    toggleFooterVisibility();
+});
